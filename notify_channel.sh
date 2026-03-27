@@ -2,7 +2,7 @@
 
 # Default values
 SESSION="tmux-session"
-CHANNEL="C0AJCQPUNNM"
+CHANNEL="CHANNEL_ID"
 
 # Parse arguments
 while [[ "$#" -gt 0 ]]; do
@@ -35,7 +35,7 @@ fi
 
 # 3. Capture the last 20 lines of Claude's output
 # We use .0 to target the first pane (where Claude resides)
-CONTEXT=$(tmux capture-pane -pt "$SESSION.0" -S -20)
+CONTEXT=$(tmux capture-pane -pt "$SESSION.1" -S -20)
 
 # 4. Use jq to build the JSON safely
 PAYLOAD=$(jq -n \
@@ -49,3 +49,4 @@ curl -s -X POST "https://slack.com/api/chat.postMessage" \
      -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
      -H "Content-Type: application/json; charset=utf-8" \
      -d "$PAYLOAD"
+     

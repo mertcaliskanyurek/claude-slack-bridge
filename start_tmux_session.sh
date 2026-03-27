@@ -22,11 +22,12 @@ tmux new-session -d -s $SESSION
 # Create Panes
 tmux split-window -h -t $SESSION     # Split for Bridge
 
-# 1. Start Claude (Auto-approve mode)
-tmux send-keys -t $SESSION.0 "cd $PROJECT_PATH && claude --dangerously-skip-permissions" C-m
 
-# 2. Start the Bridge Server
-tmux send-keys -t $SESSION.1 "node scripts/slack_bridge.js --session $SESSION" C-m
+# 1. Start the Bridge Server
+tmux send-keys -t $SESSION.0 "node scripts/slack_bridge.js --session $SESSION" C-m
+
+# 2. Start Claude (Auto-approve mode)
+tmux send-keys -t $SESSION.1 "cd $PROJECT_PATH && claude --dangerously-skip-permissions" C-m
 
 # Final View
 tmux attach-session -t $SESSION

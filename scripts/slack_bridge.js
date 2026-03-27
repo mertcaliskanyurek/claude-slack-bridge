@@ -22,7 +22,7 @@ app.command('/claude', async ({ command, ack, say }) => {
   // 1. Clear any stuck prompts (Ctrl+C)
   // 2. Type the message prefix (/p) and the user message
   // Note: We DO NOT add C-m here yet.
-  const pasteCmd = `tmux send-keys -t ${TMUX_SESSION}.0 C-c "/p \\"${message}\\""`;
+  const pasteCmd = `tmux send-keys -t ${TMUX_SESSION}.1 C-c "/p \\"${message}\\""`;
 
   // 3. The "Double Tap" Execution
   exec(pasteCmd, (err) => {
@@ -30,7 +30,7 @@ app.command('/claude', async ({ command, ack, say }) => {
 
     // We wait 200ms for the terminal to "digest" the long string
     setTimeout(() => {
-      exec(`tmux send-keys -t ${TMUX_SESSION}.0 C-m`, (enterErr) => {
+      exec(`tmux send-keys -t ${TMUX_SESSION}.1 C-m`, (enterErr) => {
         if (enterErr) console.error("Enter key failed");
       });
     }, 200);
