@@ -1,4 +1,4 @@
-# Claude Automation Integration
+# Claude Slack Bridge Integration
 
 This project provides a set of scripts to seamlessly connect **Claude Code** to **Slack**, allowing you to completely automate and interact with the Claude CLI remotely via Slack commands and notifications.
 
