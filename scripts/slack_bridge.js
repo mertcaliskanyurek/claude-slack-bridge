@@ -18,11 +18,29 @@ const app = new App({
 app.command('/claude', async ({ command, ack, say }) => {
   await ack();
   const message = command.text;
+  let pasteCmd = '';
 
-  // 1. Clear any stuck prompts (Ctrl+C)
-  // 2. Type the message prefix (/p) and the user message
-  // Note: We DO NOT add C-m here yet.
-  const pasteCmd = `tmux send-keys -t ${TMUX_SESSION}.1 C-c "/p \\"${message}\\""`;
+  if (message.startsWith('enter')) {
+    exec(`tmux send-keys -t ${TMUX_SESSION}.1 C-m`, (enterErr) => {
+      if (enterErr) console.error("Enter key failed");
+    });
+    return;
+  }
+
+  if (message.startsWith('select')) {
+    const selection = message.slice(7);
+    exec(`tmux send-keys -t ${TMUX_SESSION}.1 C-c "${selection}"`, (selectErr) => {
+      if (selectErr) console.error("Selection command failed");
+    });
+    return;
+  }
+  
+  if(message.startsWith('exec')) {
+    const command = message.slice(5);
+    pasteCmd = `tmux send-keys -t ${TMUX_SESSION}.1 C-c "${command}"`;
+  } else {
+    pasteCmd = `tmux send-keys -t ${TMUX_SESSION}.1 C-c "/p \\"${message}\\""`;
+  }
 
   // 3. The "Double Tap" Execution
   exec(pasteCmd, (err) => {
